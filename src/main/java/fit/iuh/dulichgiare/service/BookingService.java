@@ -22,34 +22,38 @@ import fit.iuh.dulichgiare.dto.RevenueStatistics;
 @Service
 public interface BookingService {
 
-    public List<BookingDTO> getAllBookings(int voucherIdExist) throws InterruptedException, ExecutionException;
+	public List<BookingDTO> getAllBookings(int voucherIdExist) throws InterruptedException, ExecutionException;
 
-    public List<BookingDTO> getTop10BookingRecently();
+	public List<BookingDTO> getTop10BookingRecently();
 
-    public BookingSave saveBooking(BookingDTO bookingDTO, String phoneCustomer)
-            throws InterruptedException, ExecutionException;
+	public BookingSave saveBooking(BookingDTO bookingDTO, String phoneCustomer)
+			throws InterruptedException, ExecutionException;
 
-    public int updateBooking(BookingDTO bookingDTO, String phoneEmployee)
-            throws InterruptedException, ExecutionException;
+	public int updateBooking(BookingDTO bookingDTO, String phoneEmployee)
+			throws InterruptedException, ExecutionException;
 
-    public String deleteBooking(long id) throws InterruptedException, ExecutionException;
+	public String deleteBooking(long id) throws InterruptedException, ExecutionException;
 
-    public BookingDTO getBookingById(long id, String userName) throws InterruptedException, ExecutionException;
+	public BookingDTO getBookingById(long id, String userName) throws InterruptedException, ExecutionException;
 
-    public List<BookingDTO> getAllBookingStatusWaitForPay(String userName);
+	public List<BookingDTO> getAllBookingStatusWaitForPay(String userName);
 
-    public List<BookingDTO> getAllBookingStatusSuccess(String userName);
+	public List<BookingDTO> getAllBookingStatusSuccess(String userName);
 
-    public void deleteExpiredBookings();
+//automation
+	public void deleteExpiredBookings();
 
-    public BookingCount countSuccessfulBookings();
+	public void sendMailOneDayBeforeTravelerNotification();
 
-    public BookingSum sumTotalBillSuccessfulBookings();
+//
+	public BookingCount countSuccessfulBookings();
 
-    public Map<DayOfWeek, Double> calculateRevenueByDayOfWeek(LocalDateTime startDate, LocalDateTime endDate);
+	public BookingSum sumTotalBillSuccessfulBookings();
 
-    public String calculateWeeklyTotal();
+	public Map<DayOfWeek, Double> calculateRevenueByDayOfWeek(LocalDateTime startDate, LocalDateTime endDate);
 
-    public List<RevenueStatistics> calculateRevenueByMonth();
+	public String calculateWeeklyTotal();
+
+	public List<RevenueStatistics> calculateRevenueByMonth();
 
 }

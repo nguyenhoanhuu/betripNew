@@ -23,7 +23,7 @@ public interface TourService {
 
 	public int saveTour(TourDTOSave tourDTOSave, String userName) throws InterruptedException, ExecutionException;
 
-	public int updateTour(TourDTO TourDTOSave) throws InterruptedException, ExecutionException;
+	public int updateTour(TourDTOSave tourDTOSave, String userName) throws InterruptedException, ExecutionException ;
 
 	public int deleteTour(long id) throws InterruptedException, ExecutionException;
 

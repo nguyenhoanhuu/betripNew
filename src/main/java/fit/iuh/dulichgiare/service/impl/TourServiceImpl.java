@@ -186,9 +186,57 @@ public class TourServiceImpl implements TourService {
 	}
 
 	@Override
-	public int updateTour(TourDTO tourDTOSave) throws InterruptedException, ExecutionException {
-
-		return 1;
+	public int updateTour(TourDTOSave tourDTOSave, String userName) throws InterruptedException, ExecutionException {
+		Employee employee = employeeRepo.findEmployeeByPhone(userName);
+		if (employee == null) {
+			return 0;
+		}
+		if (tourDTOSave != null && !tourDTOSave.getPolicyName().isEmpty()) {
+			Policy policy = policyRepo.findPolicyByPolicyName(tourDTOSave.getPolicyName());
+			Promotion promotion = promotionRepo.findPromotionByName(tourDTOSave.getPromotionName());
+			Tour tourSave = null;
+			if (promotion == null) {
+				Tour tour = new Tour(true, tourDTOSave.getName(), tourDTOSave.getImage(),
+						tourDTOSave.getDepartureTime(), tourDTOSave.getDeparture(), tourDTOSave.getDestination(),
+						tourDTOSave.getStartDay(), tourDTOSave.getEndDay(), tourDTOSave.getNumberOfDay(),
+						tourDTOSave.getNumberOfPeople(), 0, tourDTOSave.getType(), tourDTOSave.getPrice(),
+						LocalDateTime.now(), 0, employee.getName(), policy);
+				tourSave = tourRepo.save(tour);
+			} else {
+				Tour tour = new Tour(true, tourDTOSave.getName(), tourDTOSave.getImage(),
+						tourDTOSave.getDepartureTime(), tourDTOSave.getDeparture(), tourDTOSave.getDestination(),
+						tourDTOSave.getStartDay(), tourDTOSave.getEndDay(), tourDTOSave.getNumberOfDay(),
+						tourDTOSave.getNumberOfPeople(), 0, tourDTOSave.getType(), tourDTOSave.getPrice(),
+						LocalDateTime.now(), 0, employee.getName(), promotion, policy);
+				tourSave = tourRepo.save(tour);
+			}
+			if (tourSave.getId() > 0 && !(tourDTOSave.getTourGuideName().isEmpty())) {
+				for (String tourGuideName : tourDTOSave.getTourGuideName()) {
+					TourGuide tourGuide = tourGuideRepo.findTourGuideByName(tourGuideName);
+					TourGuideTour tourGuideTour = new TourGuideTour(tourSave, tourGuide);
+					tourGuideTourRepo.save(tourGuideTour);
+				}
+			}
+			if (tourSave != null) {
+				TourDetail tourDetail = new TourDetail(tourDTOSave.getTourDetail().getDescription(),
+						tourDTOSave.getTourDetail().getTransport(), tourDTOSave.getTourDetail().getStarHotel(),
+						tourSave);
+				tourDetailRepo.save(tourDetail);
+			}
+			Itinerary itinerary = new Itinerary(tourSave, tourDTOSave.getName());
+			itineraryRepo.save(itinerary);
+			List<ItineraryDetail> itineraryDetails = new ArrayList<>();
+			for (ItineraryDetailDTO iterableDTO : tourDTOSave.getItineraryDetail()) {
+				ItineraryDetail itineraryDetail = new ItineraryDetail();
+				itineraryDetail.setDescription(iterableDTO.getDescription());
+				itineraryDetail.setTitile(iterableDTO.getTitle());
+				itineraryDetail.setItinerary(itinerary);
+				itineraryDetails.add(itineraryDetail);
+			}
+			itineraryDetailRepo.saveAll(itineraryDetails);
+			return 1;
+		}
+		return 2;
 	}
 
 	@Transactional

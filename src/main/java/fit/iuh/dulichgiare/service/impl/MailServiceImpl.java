@@ -62,8 +62,7 @@ public class MailServiceImpl implements MailService {
 	}
 
 	@Override
-	public String sendEmailForUserWhenRequestTourNew(Customer customer, String reasonReject)
-			throws MessagingException {
+	public String sendEmailForUserWhenRequestTourNew(Customer customer, String reasonReject) throws MessagingException {
 		MimeMessage mimeMessage = this.emailSender.createMimeMessage();
 		String body;
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
@@ -85,4 +84,38 @@ public class MailServiceImpl implements MailService {
 		return "oke";
 	}
 
+	@Override
+	public String sendEmailReminderOneDayBeforeForTraveller(Booking booking) throws MessagingException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+		MimeMessage mimeMessage = this.emailSender.createMimeMessage();
+		String body;
+		MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+		message.setFrom(Constants.MAIL_SENDER);
+//		TODO: apply email user later
+//		message.setTo(customer.getEmail());
+		message.setTo("hoanhuudev@gmail.com");
+		message.setSubject("NHẮC NHỞ: Lịch trình du lịch sắp tới -" + formatter.format(booking.getStartDayTour()));
+		String departureTime = booking.getDepartureTime() + " " + formatter.format(booking.getStartDayTour());
+		String timeTour = booking.getTour().getNumberofday() + "N" + (booking.getTour().getNumberofday() - 1) + "Đ";
+		int volumeCustomer = booking.getNumberofadbult() + booking.getNumberofchildren();
+		body = getContextForReminderTraveller(booking.getCustomer().getName(), booking.getTour().getName(),
+				departureTime, booking.getTour().getDeparture(), booking.getTour().getDestination(), timeTour,
+				volumeCustomer);
+		message.setText(body, true);
+		emailSender.send(mimeMessage);
+		return "oke";
+	}
+
+	private String getContextForReminderTraveller(String fullName, String nameTour, String departureTime,
+			String departure, String destination, String timeTour, int volumeCustomer) {
+		Context ctx = new Context();
+		ctx.setVariable("fullName", fullName);
+		ctx.setVariable("nameTour", nameTour);
+		ctx.setVariable("departure", departure);
+		ctx.setVariable("destination", destination);
+		ctx.setVariable("departureTime", departureTime);
+		ctx.setVariable("timeTour", timeTour);
+		ctx.setVariable("volumeCustomer", volumeCustomer);
+		return templateEngine.process("reminder_one_day_before_template.html", ctx);
+	}
 }

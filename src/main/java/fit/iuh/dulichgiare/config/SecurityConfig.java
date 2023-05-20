@@ -17,31 +17,32 @@ import jakarta.servlet.Filter;
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private Filter jwtRequestFilter;
+	@Autowired
+	private Filter jwtRequestFilter;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
-    @Bean
-    public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration)
-            throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+	@Bean
+	public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 
-    @Bean
-    public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
-        return http.cors().and().csrf().disable().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests()
-                .requestMatchers("/", "/authenticate", "/employees/**", "/customer/**", "/itinerarys/**", "/tours/**",
-                        "/vouchers/**", "/orders/**", "/itinerarydetails/**", "/promotions/**", "/tourdetails/**",
-                        "/token/*", "/tourguides/**", "/policys/**", "/tourguidetours/**", "/orders/**", "/api/**",
-                        "/requesttravel/**", "/blogpost/**", "/api/sms", "/bookings/**", "/mail", "/**", "/charge","/order","/payment/**")
-                .permitAll().requestMatchers("/demo/get2", "/demo/get3").hasAnyRole("USER")
-                .requestMatchers("/demo/get1").hasAnyRole("EMPLOYEE").and()
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).build();
+	@Bean
+	public SecurityFilterChain configure(final HttpSecurity http) throws Exception {
+		return http.cors().and().csrf().disable().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeHttpRequests()
+				.requestMatchers("/", "/authenticate", "/employees/**", "/customer/**", "/itinerarys/**", "/tours/**",
+						"/vouchers/**", "/orders/**", "/itinerarydetails/**", "/promotions/**", "/tourdetails/**",
+						"/token/*", "/tourguides/**", "/policys/**", "/tourguidetours/**", "/orders/**", "/api/**",
+						"/requesttravel/**", "/blogpost/**", "/api/sms", "/bookings/**", "/mail", "/**", "/charge",
+						"/order", "/payment/**", "/excel/**")
+				.permitAll().requestMatchers("/demo/get2", "/demo/get3").hasAnyRole("USER")
+				.requestMatchers("/demo/get1").hasAnyRole("EMPLOYEE").and()
+				.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class).build();
 
-    }
+	}
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <p>
+        Dear <span th:text="${fullName}"></span>,
+    </p>
+    <div>
+        <p>Tôi gửi email này để thông báo về lịch trình du lịch của bạn vào ngày <b><span th:text="${departureTime}"></span></b>. Chúng tôi muốn nhắc
+            nhở bạn rằng ngày mai sẽ là ngày khởi hành của bạn.</p>
+    </div>
+    <table>
+        <tr>
+            Dưới đây là các chi tiết quan trọng về chuyến đi của bạn:
+        </tr>
+        <tr>
+            <td>Tên tour: <b><span th:text="${nameTour}"></span></b></td>
+        </tr>
+        <tr>
+            <td>Điểm xuất phát: <b><span th:text="${departure}"></span> <span th:text="${startDay}"></span></b>
+            </td>
+        </tr>
+        <tr>
+            <td>Điểm đến: <b><span th:text="${destination}"></span> <span th:text="${startDay}"></span></b>
+            </td>
+        </tr>
+        <tr>
+            <td>Thời gian tour:<b> <span th:text="${timeTour}"></span></b></td>
+
+        </tr>
+        <tr>
+            <td>Số lượng :<b> <span th:text="${volumeCustomer}"> người</span></b></td>
+        </tr>
+    </table>
+    <p>Xin vui lòng đảm bảo bạn đã chuẩn bị mọi thứ cần thiết cho chuyến đi và đến điểm xuất phát đúng giờ. Nếu bạn cần
+        bất kỳ thông tin bổ sung nào hoặc có câu hỏi, xin vui lòng liên hệ với chúng tôi qua email hoặc số điện thoại
+        sau: 0255 38383838.</p>
+    <p>Chúng tôi hy vọng bạn sẽ có một chuyến đi tuyệt vời và trải nghiệm đầy thú vị. Nếu có bất kỳ thay đổi hoặc sự cố
+        nào xảy ra, xin vui lòng thông báo cho chúng tôi ngay lập tức.</p>
+    <p>Trân trọng,</p>
+    <p>HappyTrip</p>
+
+    </p>
+</body>
+
+</html>
