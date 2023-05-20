@@ -44,10 +44,10 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
 	Booking findBookingById(long id);
 
-	@Query(value = "SELECT * FROM dulichgiare1.booking where status = 'Chờ thanh toán' or status='Chưa chọn hình thức thanh toán' having customer_id=?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM booking where status = 'Chờ thanh toán' or status='Chưa chọn hình thức thanh toán' having customer_id=?1", nativeQuery = true)
 	List<Booking> findBookingStatusWatiForPay(long id);
 
-	@Query(value = "SELECT * FROM dulichgiare1.booking where status = 'Thành công'and customer_id=?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM booking where status = 'Thành công'and customer_id=?1", nativeQuery = true)
 	List<Booking> findBookingStatusSuccess(long id);
 
 	List<Booking> findBookingByActiveTrue(Sort by);
