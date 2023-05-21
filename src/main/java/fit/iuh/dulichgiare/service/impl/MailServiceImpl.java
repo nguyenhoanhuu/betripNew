@@ -27,15 +27,17 @@ public class MailServiceImpl implements MailService {
 
 	@Override
 	public String sendEmailWhenBookingIsSuccess(String from, String to, String subject, String fullName,
-			Booking booking, String linkOrderId) throws MessagingException {
+			Booking booking, String linkOrderId, String templateMail) throws MessagingException {
 		MimeMessage mimeMessage = this.emailSender.createMimeMessage();
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
 		String departureTime = booking.getDepartureTime() + " " + formatter.format(booking.getStartDayTour());
 		String timeTour = booking.getTour().getNumberofday() + "N" + (booking.getTour().getNumberofday() - 1) + "Đ";
+		double totalBill =booking.getTotal();
+		long billConvert = (long) totalBill;
 		String body = getContextEmail(fullName, booking.getTour().getName(), departureTime, timeTour,
-				booking.getNumberofadbult() + booking.getNumberofchildren(), Double.toString(booking.getTotal()),
-				linkOrderId, booking.getStatus(), null, Constants.BOOKING_TEMPLATE);
+				booking.getNumberofadbult() + booking.getNumberofchildren(), Long.toString(billConvert)+"VNĐ",
+				linkOrderId, booking.getStatus(), null, templateMail);
 		message.setFrom(from);
 		message.setTo(to);
 		message.setSubject(subject);
@@ -48,7 +50,6 @@ public class MailServiceImpl implements MailService {
 			int volumeCustomer, String totalBill, String linkOrderId, String status, String reasonReject,
 			String template) {
 		Context ctx = new Context();
-		MimeMessage message = emailSender.createMimeMessage();
 		ctx.setVariable("fullName", fullName);
 		ctx.setVariable("nameTour", nameTour);
 		ctx.setVariable("departureTime", departureTime);
@@ -67,8 +68,8 @@ public class MailServiceImpl implements MailService {
 		String body;
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
 		message.setFrom(Constants.MAIL_SENDER);
-//		message.setTo(customer.getEmail());
-		message.setTo("hoanhuudev@gmail.com");
+		message.setTo(customer.getEmail());
+//		message.setTo("hoanhuudev@gmail.com");
 		if (!reasonReject.equals("")) {
 			message.setSubject(Constants.REQUEST_TRAVEL_REJECTED);
 			body = getContextEmail(customer.getName(), null, null, null, 0, null, null, null, reasonReject,
@@ -92,8 +93,8 @@ public class MailServiceImpl implements MailService {
 		MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
 		message.setFrom(Constants.MAIL_SENDER);
 //		TODO: apply email user later
-//		message.setTo(customer.getEmail());
-		message.setTo("hoanhuudev@gmail.com");
+		message.setTo(booking.getCustomer().getEmail());
+//		message.setTo("hoanhuudev@gmail.com");
 		message.setSubject("NHẮC NHỞ: Lịch trình du lịch sắp tới -" + formatter.format(booking.getStartDayTour()));
 		String departureTime = booking.getDepartureTime() + " " + formatter.format(booking.getStartDayTour());
 		String timeTour = booking.getTour().getNumberofday() + "N" + (booking.getTour().getNumberofday() - 1) + "Đ";

@@ -9,7 +9,7 @@ import jakarta.mail.MessagingException;
 @Service
 public interface MailService {
 	public String sendEmailWhenBookingIsSuccess(String from, String to, String subject, String fullName,
-			Booking booking, String linkOrderId) throws MessagingException;
+			Booking booking, String linkOrderId, String templateMail) throws MessagingException;
 
 	public String sendEmailForUserWhenRequestTourNew(Customer customer, String reasonReject) throws MessagingException;
 

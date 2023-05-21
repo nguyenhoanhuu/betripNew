@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <p>
+        Dear <span th:text="${fullName}"></span>,
+    </p>
+    <div>
+        <p>Chúng tôi xin gửi email này để xác nhận rằng bạn đã chọn hình thức thanh toán chuyển tiền cho đơn đặt tour gần đây của
+            mình. Dưới đây là thông tin về số tài khoản cần chuyển và các chi tiết liên quan đến hoá đơn của bạn:</p>
+    </div>
+    <table>
+        <tr>
+            <td>Số tài khoản người nhận:<b> 0271001101234</b></td>
+        </tr>
+        <tr>
+            <td> Ngân hàng:<b> VietComBank</b></td>
+        </tr>
+        <tr>
+            <td>Chi nhánh: <b>TP. Hồ Chí Minh</b></td>
+        </tr>
+        <tr>
+            <td>Tên chủ tài khoản:<b> NGUYEN HOAN HUU</b></td>
+        </tr>
+        <tr>
+            <td>------------------------------------------------------------------------------------</td>
+        </tr>
+        <tr>
+            <td><b>Thông tin hoá đơn</b></td>
+        </tr>
+        <tr>
+            <td>Tên tour: <b><span th:text="${nameTour}"></span></b></td>
+        </tr>
+        <tr>
+            <td>Ngày khởi hành: <b><span th:text="${departureTime}"></span> <span th:text="${startDay}"></span></b>
+            </td>
+        </tr>
+        <tr>
+            <td>Thời gian tour:<b> <span th:text="${timeTour}"></span></b></td>
+
+        </tr>
+        <tr>
+            <td>Số lượng :<b> <span th:text="${volumeCustomer}"> người</span></b></td>
+        </tr>
+        <tr>
+            <td>Trạng thái: <b><span th:text="${status}"></b></span></td>
+        </tr>
+        <tr>
+            <td>Tổng chi phí: <b><span th:text="${totalBill}"></span></b></td>
+        </tr>
+    </table>
+    <p>Xin lưu ý rằng việc chuyển tiền phải được thực hiện trong vòng 24 giờ kể từ ngày nhận email này. Để đảm bảo
+        việc thanh toán của bạn được xử lý một cách nhanh chóng và chính xác, vui lòng chú ý các thông tin trên và chắc
+        chắn rằng bạn đã chuyển đúng số tiền yêu cầu.</p>
+    <p>Sau khi bạn đã chuyển tiền thành công, vui lòng thông báo cho chúng tôi bằng cách trả lời email này hoặc liên hệ
+        với chúng tôi qua số điện thoại 0968172177 để chúng tôi có thể xác nhận thanh toán và tiến hành xử
+        lý đơn đặt tour của bạn.</p>
+    <p>
+        Nếu bạn có bất kỳ câu hỏi hoặc cần hỗ trợ thêm, xin đừng ngần ngại liên hệ với chúng tôi. Chúng tôi sẽ sẵn lòng
+        giúp đỡ bạn.</a>
+    <p>Chân thành cảm ơn bạn đã lựa chọn hình thức thanh toán chuyển tiền và đã sử dụng dịch vụ của chúng tôi. Chúng tôi
+        rất hân hạnh được phục vụ bạn và mong muốn tiếp tục hợp tác trong tương lai.</p>
+    <p>Trân trọng,</p>
+    <p>TripHappy</p>
+
+    </p>
+</body>
+
+</html>
