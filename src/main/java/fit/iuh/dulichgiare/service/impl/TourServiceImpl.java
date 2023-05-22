@@ -1,7 +1,6 @@
 package fit.iuh.dulichgiare.service.impl;
 
 import java.text.DecimalFormat;
-
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -673,7 +673,7 @@ public class TourServiceImpl implements TourService {
 		return response;
 	}
 
-//    @Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
+    @Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
 	public void deleteTourByPromotionEndDate() {
 		LocalDate now = LocalDate.now();
 		List<Promotion> expiredPromotions = promotionRepo.findByEndday(now);

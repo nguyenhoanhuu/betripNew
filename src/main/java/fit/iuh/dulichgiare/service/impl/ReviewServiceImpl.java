@@ -52,7 +52,7 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 		for (Booking booking : bookings) {
 			if (booking.getTour().getId() == reviewDTO.getTourId()) {
-				if (booking.getTour().getEndday().isBefore(LocalDate.now())) {
+				if (booking.getEndDayTour().isBefore(LocalDate.now())) {
 					Review review = new Review();
 					review.setComment(reviewDTO.getComment());
 					review.setRating(reviewDTO.getRating());
