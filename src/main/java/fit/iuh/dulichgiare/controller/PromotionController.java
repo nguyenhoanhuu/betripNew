@@ -26,76 +26,87 @@ import fit.iuh.dulichgiare.service.PromotionService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PromotionController {
 
-    @Autowired
-    private PromotionService promotionService;
+	@Autowired
+	private PromotionService promotionService;
 
-    @GetMapping(value = { "", "/" })
-    public List<PromotionDTO> getAllPromotions() throws InterruptedException, ExecutionException {
-        return promotionService.getAllPromotions();
-    }
+	@GetMapping(value = { "", "/" })
+	public List<PromotionDTO> getAllPromotions() throws InterruptedException, ExecutionException {
+		return promotionService.getAllPromotions();
+	}
 
-    @GetMapping("/search")
-    public List<PromotionDTO> getAllPromotionByName(@RequestParam String name)
-            throws InterruptedException, ExecutionException {
-        return promotionService.getAllPromotionByName(name);
-    }
+	@GetMapping("/search")
+	public List<PromotionDTO> getAllPromotionByName(@RequestParam String name)
+			throws InterruptedException, ExecutionException {
+		return promotionService.getAllPromotionByName(name);
+	}
 
-    @GetMapping("/{id}")
-    public PromotionDTO getPromotionById(@PathVariable int id) throws InterruptedException, ExecutionException {
-        return promotionService.getPromotionById(id);
-    }
+	@GetMapping("/{id}")
+	public PromotionDTO getPromotionById(@PathVariable int id) throws InterruptedException, ExecutionException {
+		return promotionService.getPromotionById(id);
+	}
 
-    @PostMapping(value = { "", "/save" })
-    public ResponseEntity<MessageResponse> savePromotion(@RequestBody Promotion promotion)
-            throws InterruptedException, ExecutionException {
-        int result = promotionService.savePromotion(promotion);
-        MessageResponse messageResponse = new MessageResponse();
-        if (result == 0) {
-            messageResponse.setStatus(false);
-            messageResponse.setMessage("Vui lòng nhập giảm giá lớn hơn 0");
-            return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
-        } else if (result == 1) {
-            messageResponse.setStatus(false);
-            messageResponse.setMessage("Vui lòng nhập giảm giá lớn hơn 0");
-            return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
-        } else if (result == 2) {
-            messageResponse.setStatus(false);
-            messageResponse.setMessage("Vui lòng nhập ngày kết thúc trước ngày hiện tại ");
-            return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
-        } else if (result == 4) {
-            messageResponse.setStatus(false);
-            messageResponse.setMessage("Tên khuyến mãi đã tồn tại");
-            return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
-        } else {
-            messageResponse.setStatus(true);
-            messageResponse.setMessage("Thêm khuyến mãi thành công");
-            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
-        }
-    }
+	@PostMapping(value = { "", "/save" })
+	public ResponseEntity<MessageResponse> savePromotion(@RequestBody Promotion promotion)
+			throws InterruptedException, ExecutionException {
+		int result = promotionService.savePromotion(promotion);
+		MessageResponse messageResponse = new MessageResponse();
+		if (result == 0) {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Vui lòng nhập giảm giá lớn hơn 0");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		} else if (result == 1) {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Vui lòng nhập giảm giá lớn hơn 0");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		} else if (result == 2) {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Vui lòng nhập ngày kết thúc trước ngày hiện tại ");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		} else if (result == 4) {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Tên khuyến mãi đã tồn tại");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		} else {
+			messageResponse.setStatus(true);
+			messageResponse.setMessage("Thêm khuyến mãi thành công");
+			return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+		}
+	}
 
-    @PostMapping(value = { "", "/update" })
-    public int updatePromotion(@RequestBody Promotion promotion) throws InterruptedException, ExecutionException {
-        return promotionService.updatePromotion(promotion);
-    }
+	@PostMapping(value = { "/update" })
+	public ResponseEntity<MessageResponse> updatePromotion(@RequestBody Promotion promotion)
+			throws InterruptedException, ExecutionException {
+		int result = promotionService.updatePromotion(promotion);
+		MessageResponse messageResponse = new MessageResponse();
+		if (result == 0) {
+			messageResponse.setStatus(true);
+			messageResponse.setMessage("Cập nhật khuyến mãi thành công");
+			return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+		} else {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Lỗi nhập dữ liệu khi cập nhật");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<MessageResponse> deletePromotion(@PathVariable int id)
-            throws InterruptedException, ExecutionException {
-        int result = promotionService.deletePromotion(id);
-        MessageResponse messageResponse = new MessageResponse();
-        if (result == 0) {
-            messageResponse.setStatus(true);
-            messageResponse.setMessage("Xoá thành công");
-            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
-        } else {
-            messageResponse.setStatus(false);
-            messageResponse.setMessage("Lỗi khi xoá");
-            return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
-        }
-    }
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<MessageResponse> deletePromotion(@PathVariable int id)
+			throws InterruptedException, ExecutionException {
+		int result = promotionService.deletePromotion(id);
+		MessageResponse messageResponse = new MessageResponse();
+		if (result == 0) {
+			messageResponse.setStatus(true);
+			messageResponse.setMessage("Xoá thành công");
+			return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+		} else {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Lỗi khi xoá");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @GetMapping(value = { "/listName" })
-    public List<String> getAllNamePromotion() {
-        return promotionService.getAllNamePromotion();
-    }
+	@GetMapping(value = { "/listName" })
+	public List<String> getAllNamePromotion() {
+		return promotionService.getAllNamePromotion();
+	}
 }
