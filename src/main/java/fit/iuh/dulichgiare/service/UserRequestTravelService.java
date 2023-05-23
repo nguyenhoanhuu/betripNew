@@ -20,5 +20,7 @@ public interface UserRequestTravelService {
 	public List<UserRequestTravelDTO> getAllRequestTravelByUserId(String userId);
 
 	public void sendMailStatusRequestTourNotification(Long id, String nameCustomer,String reasonReject)throws MessagingException;
-
+	
+	public long countUserRequestTravel();
+	
 }

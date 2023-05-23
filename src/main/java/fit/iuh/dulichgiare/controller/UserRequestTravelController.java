@@ -89,4 +89,9 @@ public class UserRequestTravelController {
 		userRequestTravelService.sendMailStatusRequestTourNotification(id, customerName, reasonReject);
 		return "oke";
 	}
+
+	@GetMapping("/count")
+	public long countUserRequestTravel() {
+		return userRequestTravelService.countUserRequestTravel();
+	}
 }

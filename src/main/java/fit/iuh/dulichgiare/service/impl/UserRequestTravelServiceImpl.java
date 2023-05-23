@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import fit.iuh.dulichgiare.constant.Constants;
 import fit.iuh.dulichgiare.dto.UserRequestTravelDTO;
@@ -194,6 +195,11 @@ public class UserRequestTravelServiceImpl implements UserRequestTravelService {
 				e.printStackTrace();
 			}
 		});
+	}
+
+	@Override
+	public long countUserRequestTravel() {
+		return userRequestTravelRepo.count();
 	}
 
 }
