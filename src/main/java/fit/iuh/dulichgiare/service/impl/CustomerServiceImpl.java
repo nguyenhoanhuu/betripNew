@@ -67,14 +67,15 @@ public class CustomerServiceImpl implements CustomerService {
 			customerDTOs.add(customerDTO);
 		}
 		List<Customer> customers = customerRepository.findAll();
-		for (Customer customer : customers) {
-			customerDTO.setId(customer.getId());
-			customerDTO.setName(customer.getName());
-			customerDTO.setAddress("Việt Nam");
-			customerDTO.setPhone(customer.getPhone());
-			customerDTO.setEmail(customer.getEmail());
-			customerDTO.setResult(1);
-			customerDTOs.add(customerDTO);
+		for (Customer customer : customers) 
+		{AccountCustomerDTO customerDTOFor = new AccountCustomerDTO();
+		customerDTOFor.setId(customer.getId());
+		customerDTOFor.setName(customer.getName());
+		customerDTOFor.setAddress("Việt Nam");
+		customerDTOFor.setPhone(customer.getPhone());
+		customerDTOFor.setEmail(customer.getEmail());
+		customerDTOFor.setResult(1);
+			customerDTOs.add(customerDTOFor);
 		}
 		return customerDTOs;
 	}
