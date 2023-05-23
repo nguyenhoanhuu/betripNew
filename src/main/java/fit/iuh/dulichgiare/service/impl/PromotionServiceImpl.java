@@ -39,8 +39,6 @@ public class PromotionServiceImpl implements PromotionService {
 		if (savePromotion.getDiscount() < 0) {
 			return 0;
 		} else if (savePromotion.getDiscount() == 0) {
-			System.out.println(savePromotion.getEndday());
-			System.out.println(savePromotion.getEndday().isAfter(LocalDate.now()));
 			return 1;
 		} else if (savePromotion.getEndday().isBefore(LocalDate.now())) {
 			return 2;

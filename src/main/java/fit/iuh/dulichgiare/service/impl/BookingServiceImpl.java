@@ -304,7 +304,8 @@ public class BookingServiceImpl implements BookingService {
 	}
 
 	@Override
-	@Scheduled(cron = "0 0 1 * * ?") // Thực hiện vào lúc 1 giờ sáng mỗi ngày
+//	@Scheduled(cron = "0 0 1 * * ?") // Thực hiện vào lúc 1 giờ sáng mỗi ngày
+	@Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
 	public void deleteExpiredBookings() {
 		List<Booking> bookings = bookingRepo.findAll();
 		for (Booking booking : bookings) {
@@ -325,6 +326,8 @@ public class BookingServiceImpl implements BookingService {
 
 	@Override
 //	@Scheduled(cron = "0 */1 * ? * *")
+//	@Scheduled(cron = "0 0 1 * * ?") // Thực hiện vào lúc 1 giờ sáng mỗi ngày
+	@Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
 	public void sendMailOneDayBeforeTravelerNotification() {
 		List<Booking> bookings = bookingRepo.findByStatus(Constants.STATUS_THANH_CONG);
 		log.info("Get data booking status successfully");

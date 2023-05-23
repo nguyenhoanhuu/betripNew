@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import fit.iuh.dulichgiare.dto.VoucherCheck;
@@ -112,7 +113,7 @@ public class VoucherServiceImpl implements VoucherService {
 
     }
 
-//    @Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
+    @Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
 //    @Scheduled(cron = "0 */1 * ? * *")
     @Override
     public void automationCheckVoucherWhenExpiryDate() {
@@ -126,5 +127,4 @@ public class VoucherServiceImpl implements VoucherService {
             }
         }
     }
-
 }
