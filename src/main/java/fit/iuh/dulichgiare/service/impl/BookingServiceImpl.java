@@ -318,6 +318,9 @@ public class BookingServiceImpl implements BookingService {
 					log.info("Proceed to delete the booking with id -" + booking.getId());
 					booking.setActive(false);
 					bookingRepo.save(booking);
+					Tour tour = tourRepo.findById(booking.getTour().getId()).get();
+					tour.setSubcriber(tour.getSubcriber()+(booking.getNumberofadbult()+booking.getNumberofchildren()));
+					tourRepo.save(tour);
 					log.info("Delete tour success with id- " + booking.getId());
 				}
 			}

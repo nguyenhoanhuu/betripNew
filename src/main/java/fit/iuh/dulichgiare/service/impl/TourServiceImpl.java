@@ -117,6 +117,11 @@ public class TourServiceImpl implements TourService {
 			dto.setCreateAt(tour.getCreateat());
 			dto.setLiked(tour.getLiked());
 			dto.setCreatedBy(tour.getCreatedBy());
+			if (tour.getPromotion() != null) {
+				dto.setPromotionPrice(tour.getPromotion().getDiscount());
+			} else {
+				dto.setPromotionPrice(0);
+			}
 			dto.setType(tour.getType());
 			if (itinerary != null) {
 				dto.setItineraryName(itinerary.getDescription());
@@ -670,7 +675,7 @@ public class TourServiceImpl implements TourService {
 		return response;
 	}
 
-    @Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
+	@Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
 	public void deleteTourByPromotionEndDate() {
 		LocalDate now = LocalDate.now();
 		List<Promotion> expiredPromotions = promotionRepo.findByEndday(now);
