@@ -46,11 +46,7 @@ public class TourController {
 	public ResponseEntity<MessageResponse> saveTour(@RequestBody TourDTOSave tourDTOSave,
 			@AuthenticationPrincipal UserDetails user) throws InterruptedException, ExecutionException {
 		MessageResponse messageResponse = new MessageResponse();
-		if (user == null) {
-			messageResponse.setStatus(false);
-			messageResponse.setMessage("Vui lòng đăng nhập với quyền admin!");
-			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
-		}
+
 		int result = tourService.saveTour(tourDTOSave, user.getUsername());
 
 		if (result == 0) {

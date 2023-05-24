@@ -129,9 +129,6 @@ public class TourServiceImpl implements TourService {
 	public int saveTour(TourDTOSave tourDTOSave, String userName) throws InterruptedException, ExecutionException {
 		Employee employee = employeeRepo.findEmployeeByPhone(userName);
 
-		if (employee == null) {
-			return 0;
-		}
 		if (checkTourExisted(tourDTOSave.getName())) {
 			return 3;
 		}
