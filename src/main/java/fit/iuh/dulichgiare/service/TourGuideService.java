@@ -22,7 +22,7 @@ public interface TourGuideService {
 
     public int updateTourGuide(TourGuide tourGuide) throws InterruptedException, ExecutionException;
 
-    public String deleteTourGuide(long id) throws InterruptedException, ExecutionException;
+    public int deleteTourGuide(long id) throws InterruptedException, ExecutionException;
 
     public TourGuideDTO getTourGuideById(long id) throws InterruptedException, ExecutionException;
 

@@ -25,53 +25,75 @@ import fit.iuh.dulichgiare.service.TourGuideService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TourGuideController {
 
-    @Autowired
-    private TourGuideService tourGuideService;
+	@Autowired
+	private TourGuideService tourGuideService;
 
-    @GetMapping(value = { "", "/" })
-    public List<TourGuideDTO> getAllTourGuides() throws InterruptedException, ExecutionException {
-        return tourGuideService.getAllTourGuides();
-    }
+	@GetMapping(value = { "", "/" })
+	public List<TourGuideDTO> getAllTourGuides() throws InterruptedException, ExecutionException {
+		return tourGuideService.getAllTourGuides();
+	}
 
-    @PostMapping(value = { "", "/save" })
-    public ResponseEntity<MessageResponse> saveTourGuide(@RequestBody TourGuideDTO tourGuideDTO)
-            throws InterruptedException, ExecutionException {
-        int result = tourGuideService.saveTourGuide(tourGuideDTO);
-        MessageResponse messageResponse = new MessageResponse();
-        if (result == 0 && result == 2) {
-            messageResponse.setStatus(true);
-            messageResponse.setMessage("Thêm hướng dẫn viên du lịch thành công");
-            return new ResponseEntity<>(messageResponse, HttpStatus.OK);
-        } else if (result == 1) {
-            messageResponse.setStatus(false);
-            messageResponse.setMessage("Hướng dẫn viên du lịch đã tồn tại");
-            return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
-        } else {
-            messageResponse.setStatus(false);
-            messageResponse.setMessage("Lỗi hệ thống");
-            return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+	@PostMapping(value = { "", "/save" })
+	public ResponseEntity<MessageResponse> saveTourGuide(@RequestBody TourGuideDTO tourGuideDTO)
+			throws InterruptedException, ExecutionException {
+		int result = tourGuideService.saveTourGuide(tourGuideDTO);
+		MessageResponse messageResponse = new MessageResponse();
+		if (result == 0 || result == 2) {
+			messageResponse.setStatus(true);
+			messageResponse.setMessage("Thêm hướng dẫn viên du lịch thành công");
+			return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+		} else if (result == 1) {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Hướng dẫn viên du lịch đã tồn tại");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		} else {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Lỗi hệ thống");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
 
-        }
-    }
+		}
+	}
 
-    @PostMapping(value = { "", "/update" })
-    public int updateTourGuide(@RequestBody TourGuide tourGuide) throws InterruptedException, ExecutionException {
-        return tourGuideService.updateTourGuide(tourGuide);
-    }
+	@PostMapping(value = { "", "/update" })
+	public ResponseEntity<MessageResponse> updateTourGuide(@RequestBody TourGuide tourGuide)
+			throws InterruptedException, ExecutionException {
+		int result = tourGuideService.updateTourGuide(tourGuide);
+		MessageResponse messageResponse = new MessageResponse();
+		if (result == 0) {
+			messageResponse.setStatus(true);
+			messageResponse.setMessage("Cập nhật hướng dẫn viên du lịch thành công");
+			return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+		} else {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Lỗi nhập dữ liệu khi cập nhật");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteTourGuide(@PathVariable int id) throws InterruptedException, ExecutionException {
-        return tourGuideService.deleteTourGuide(id);
-    }
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<MessageResponse> deleteTourGuide(@PathVariable int id)
+			throws InterruptedException, ExecutionException {
+		int result = tourGuideService.deleteTourGuide(id);
+		MessageResponse messageResponse = new MessageResponse();
+		if (result == 0) {
+			messageResponse.setStatus(true);
+			messageResponse.setMessage("Xoá hướng dẫn viên du lịch thành công");
+			return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+		} else {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Lỗi khi xoá hướng dẫn viên du lịch");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		}
+	}
 
-    @GetMapping("/{id}")
-    public TourGuideDTO getTourGuideById(@PathVariable long id) throws InterruptedException, ExecutionException {
-        return tourGuideService.getTourGuideById(id);
-    }
+	@GetMapping("/{id}")
+	public TourGuideDTO getTourGuideById(@PathVariable long id) throws InterruptedException, ExecutionException {
+		return tourGuideService.getTourGuideById(id);
+	}
 
-    @GetMapping("/listName")
-    public List<String> getAllNameTourGuide() {
-        return tourGuideService.getAllNameTourGuide();
-    }
+	@GetMapping("/listName")
+	public List<String> getAllNameTourGuide() {
+		return tourGuideService.getAllNameTourGuide();
+	}
 
 }

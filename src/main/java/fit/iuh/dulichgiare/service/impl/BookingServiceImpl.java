@@ -68,7 +68,7 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 	public List<BookingDTO> getAllBookings(int voucherIdExist) throws InterruptedException, ExecutionException {
 		if (voucherIdExist == 0) {
-			return bookingRepo.findAll().stream().map(booking -> {
+			return bookingRepo.findAll(Sort.by("id").descending()).stream().map(booking -> {
 				Payment payment = paymentRepo.getPaymentByBookingId(booking.getId());
 				BookingDTO dto = new BookingDTO();
 				dto.setId(booking.getId());
@@ -319,7 +319,8 @@ public class BookingServiceImpl implements BookingService {
 					booking.setActive(false);
 					bookingRepo.save(booking);
 					Tour tour = tourRepo.findById(booking.getTour().getId()).get();
-					tour.setSubcriber(tour.getSubcriber()+(booking.getNumberofadbult()+booking.getNumberofchildren()));
+					tour.setSubcriber(
+							tour.getSubcriber() + (booking.getNumberofadbult() + booking.getNumberofchildren()));
 					tourRepo.save(tour);
 					log.info("Delete tour success with id- " + booking.getId());
 				}
