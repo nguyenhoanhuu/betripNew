@@ -22,7 +22,7 @@ public class TourGuideServiceImpl implements TourGuideService {
 	@Override
 	public List<TourGuideDTO> getAllTourGuides() throws InterruptedException, ExecutionException {
 
-		return tourGuideRepo.findAll(Sort.by("id").descending()).stream().map(tourGuide -> {
+		return tourGuideRepo.findTourGuideByActiveTrue(Sort.by("id").descending()).stream().map(tourGuide -> {
 			TourGuideDTO dto = new TourGuideDTO();
 			dto.setId(tourGuide.getId());
 			dto.setActive(tourGuide.isActive());
