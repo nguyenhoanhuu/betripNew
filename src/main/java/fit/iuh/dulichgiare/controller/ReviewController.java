@@ -83,4 +83,9 @@ public class ReviewController {
 		return reviewService.deleteReviewDTO(id, user.getUsername());
 	}
 
+	@GetMapping("/check")
+	public int check(@RequestParam long customerId, @RequestParam long tourId) {
+		return reviewService.checkCustomerPermissionReviewTour(customerId, tourId);
+	}
+
 }

@@ -18,4 +18,6 @@ public interface ReviewService {
 	public String deleteReviewDTO(long id, String userId) throws InterruptedException, ExecutionException;
 
 	public List<ReviewDTO> getAllReviewByTourId(long tourId);
+	
+	public int checkCustomerPermissionReviewTour(long customerId, long tourId);
 }

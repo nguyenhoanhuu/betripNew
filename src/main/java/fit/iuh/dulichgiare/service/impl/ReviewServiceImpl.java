@@ -117,5 +117,14 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 		return resultReviews;
 	}
-
+	
+	@Override
+	public int checkCustomerPermissionReviewTour(long customerId, long tourId) {
+		List<Booking> bookings = bookingRepo.findBookingByCustomerIdAndStatusAndTourId(customerId,
+				Constants.STATUS_THANH_CONG, tourId);
+		if (!bookings.isEmpty()) {
+			return 0;
+		}
+		return 1;
+	}
 }
