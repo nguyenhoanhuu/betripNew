@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import fit.iuh.dulichgiare.constant.Constants;
@@ -156,7 +157,7 @@ public class PaymentServiceImpl implements PaymentService {
 		return 0;
 	}
 
-//  @Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
+  @Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
 //  @Scheduled(cron = "0 */1 * ? * *")
 	@Override
 	public void automationDeletePaymentStatusOverThreeDay() {
