@@ -286,15 +286,16 @@ public class TourServiceImpl implements TourService {
 							.valueOf(formatter.format(tour.getPrice() - (tour.getPrice() * promotion.getDiscount()))));
 					tourDTO.setAdultPrice(Double
 							.valueOf(formatter.format(tour.getPrice() - (tour.getPrice() * promotion.getDiscount()))));
-					tourDTO.setChildPrice(Double.valueOf(
-							formatter.format((tour.getPrice() * 0.5) - (tour.getPrice() * promotion.getDiscount()))));
-					tourDTO.setBabyPrice(Double.valueOf(
-							formatter.format((tour.getPrice() * 0.3) - (tour.getPrice() * promotion.getDiscount()))));
+					double priceTourHavePromotion = tour.getPrice() - (tour.getPrice() * promotion.getDiscount());
+					tourDTO.setChildPrice(
+							Double.valueOf(formatter.format(priceTourHavePromotion - (priceTourHavePromotion * 0.3))));
+					tourDTO.setBabyPrice(
+							Double.valueOf(formatter.format(priceTourHavePromotion - (priceTourHavePromotion * 0.5))));
 				} else if (checkExpriryDate(promotion) == false || promotion == null) {
 					tourDTO.setPromotionPrice(tour.getPrice());
 					tourDTO.setAdultPrice(tour.getPrice());
-					tourDTO.setChildPrice(Double.valueOf(formatter.format(tour.getPrice() * 0.5)));
-					tourDTO.setBabyPrice(Double.valueOf(formatter.format(tour.getPrice() * 0.3)));
+					tourDTO.setChildPrice(Double.valueOf(formatter.format(tour.getPrice() - (tour.getPrice() * 0.3))));
+					tourDTO.setBabyPrice(Double.valueOf(formatter.format(tour.getPrice() - (tour.getPrice() * 0.5))));
 				}
 			}
 			if (tour.getPolicy().getId() > 0) {
