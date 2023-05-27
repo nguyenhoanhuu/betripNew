@@ -33,11 +33,11 @@ public class MailServiceImpl implements MailService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
 		String departureTime = booking.getDepartureTime() + " " + formatter.format(booking.getStartDayTour());
 		String timeTour = booking.getTour().getNumberofday() + "N" + (booking.getTour().getNumberofday() - 1) + "Đ";
-		double totalBill =booking.getTotal();
+		double totalBill = booking.getTotal();
 		long billConvert = (long) totalBill;
 		String body = getContextEmail(fullName, booking.getTour().getName(), departureTime, timeTour,
-				booking.getNumberofadbult() + booking.getNumberofchildren(), Long.toString(billConvert)+"VNĐ",
-				linkOrderId, booking.getStatus(), null, templateMail);
+				booking.getNumberofadbult() + booking.getNumberofchildren(), Long.toString(billConvert) + "VNĐ",
+				linkOrderId, booking.getStatus(), null, templateMail, booking.getId());
 		message.setFrom(from);
 		message.setTo(to);
 		message.setSubject(subject);
@@ -48,7 +48,7 @@ public class MailServiceImpl implements MailService {
 
 	private String getContextEmail(String fullName, String nameTour, String departureTime, String timeTour,
 			int volumeCustomer, String totalBill, String linkOrderId, String status, String reasonReject,
-			String template) {
+			String template, long bookingId) {
 		Context ctx = new Context();
 		ctx.setVariable("fullName", fullName);
 		ctx.setVariable("nameTour", nameTour);
@@ -59,6 +59,7 @@ public class MailServiceImpl implements MailService {
 		ctx.setVariable("status", status);
 		ctx.setVariable("linkOrderId", linkOrderId);
 		ctx.setVariable("reasonReject", reasonReject);
+		ctx.setVariable("bookingId", bookingId);
 		return templateEngine.process(template, ctx);
 	}
 
@@ -73,12 +74,12 @@ public class MailServiceImpl implements MailService {
 		if (!reasonReject.equals("")) {
 			message.setSubject(Constants.REQUEST_TRAVEL_REJECTED);
 			body = getContextEmail(customer.getName(), null, null, null, 0, null, null, null, reasonReject,
-					Constants.REQUEST_TRAVEL_REJECTED_TEMPLATE);
+					Constants.REQUEST_TRAVEL_REJECTED_TEMPLATE, 0);
 
 		} else {
 			message.setSubject(Constants.REQUEST_TRAVEL_APPROVAL);
 			body = getContextEmail(customer.getName(), null, null, null, 0, null, null, null, reasonReject,
-					Constants.REQUEST_TRAVEL_APPROVAL_TEMPLATE);
+					Constants.REQUEST_TRAVEL_APPROVAL_TEMPLATE, 0);
 		}
 		message.setText(body, true);
 		emailSender.send(mimeMessage);
@@ -101,14 +102,14 @@ public class MailServiceImpl implements MailService {
 		int volumeCustomer = booking.getNumberofadbult() + booking.getNumberofchildren();
 		body = getContextForReminderTraveller(booking.getCustomer().getName(), booking.getTour().getName(),
 				departureTime, booking.getTour().getDeparture(), booking.getTour().getDestination(), timeTour,
-				volumeCustomer);
+				volumeCustomer, booking.getId());
 		message.setText(body, true);
 		emailSender.send(mimeMessage);
 		return "oke";
 	}
 
 	private String getContextForReminderTraveller(String fullName, String nameTour, String departureTime,
-			String departure, String destination, String timeTour, int volumeCustomer) {
+			String departure, String destination, String timeTour, int volumeCustomer, long bookingId) {
 		Context ctx = new Context();
 		ctx.setVariable("fullName", fullName);
 		ctx.setVariable("nameTour", nameTour);
@@ -117,6 +118,8 @@ public class MailServiceImpl implements MailService {
 		ctx.setVariable("departureTime", departureTime);
 		ctx.setVariable("timeTour", timeTour);
 		ctx.setVariable("volumeCustomer", volumeCustomer);
+		ctx.setVariable("bookingId", bookingId);
+		
 		return templateEngine.process("reminder_one_day_before_template.html", ctx);
 	}
 }
