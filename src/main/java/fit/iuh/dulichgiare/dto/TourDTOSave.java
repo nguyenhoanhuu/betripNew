@@ -27,5 +27,6 @@ public class TourDTOSave implements Serializable {
     private String promotionName;
     private TourDetailDTO tourDetail;
     private List<ItineraryDetailDTO> itineraryDetail;
+    private String customerName;
 
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+	<p>
+		Dear <span th:text="${fullName}"></span>,
+	</p>
+	<div>
+		<p>Tôi rất vui thông báo rằng yêu cầu tạo tour của bạn đã được
+			chấp nhận tạo tour. Dưới đây là thông tin chi tiết về tour đã được
+			chấp nhận:</p>
+	</div>
+	<table>
+		<tr>
+			<td>Mã tour: <b><span th:text="${tourId}"></span></b></td>
+		</tr>
+		<tr>
+		<tr>
+			<td>Tên tour: <b><span th:text="${nameTour}"></span></b></td>
+		</tr>
+		<tr>
+			<td>Ngày khởi hành: <b><span th:text="${departureTime}"></span></td>
+		</tr>
+		<tr>
+			<td>Thời gian tour:<b> <span th:text="${timeTour}"></span></b></td>
+
+		</tr>
+		<tr>
+			<td>Điểm đi:<b> <span th:text="${departure}"></span></b></td>
+
+		</tr>
+		<tr>
+			<td>Điểm đến:<b> <span th:text="${destination}"></span></b></td>
+
+		</tr>
+		<tr>
+			<td>Số lượng :<b> <span th:text="${volumeCustomer}" người></span></b></td>
+		</tr>
+		<tr>
+			<td>Giá tiền :<b> <span th:text="${price}"/người></span></b></td>
+		</tr>
+
+	</table>
+	<p>Chúng tôi rất mong rằng tour của bạn sẽ mang lại những trải
+		nghiệm tuyệt vời cho khách hàng. Đội ngũ chúng tôi đã tiến hành các
+		bước cần thiết để đảm bảo rằng tour của bạn sẽ diễn ra suôn sẻ và
+		thành công.</p>
+	<p>Chân thành cảm ơn bạn đã tin tưởng và sử dụng dịch vụ của chúng
+		tôi.</p>
+		Đây là đường link dẫn đến thông tin chi tiết tour <a class="link"
+			href='localhost:8080/th:href="${linkOrderId}"'>nhấn vào đây!</a>
+	<p>Trân trọng,</p>
+	<p>TripHappy</p>
+
+	</p>
+</body>
+
+</html>

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ import fit.iuh.dulichgiare.dto.TourDTOSave;
 import fit.iuh.dulichgiare.dto.TourDetailDTO;
 import fit.iuh.dulichgiare.dto.TourGuideDTO;
 import fit.iuh.dulichgiare.entity.Booking;
+import fit.iuh.dulichgiare.entity.Customer;
 import fit.iuh.dulichgiare.entity.Employee;
 import fit.iuh.dulichgiare.entity.Itinerary;
 import fit.iuh.dulichgiare.entity.ItineraryDetail;
@@ -46,6 +48,7 @@ import fit.iuh.dulichgiare.entity.TourDetail;
 import fit.iuh.dulichgiare.entity.TourGuide;
 import fit.iuh.dulichgiare.entity.TourGuideTour;
 import fit.iuh.dulichgiare.repository.BookingRepository;
+import fit.iuh.dulichgiare.repository.CustomerRepository;
 import fit.iuh.dulichgiare.repository.EmployeeRepository;
 import fit.iuh.dulichgiare.repository.ItineraryDetailRepository;
 import fit.iuh.dulichgiare.repository.ItineraryRepository;
@@ -55,9 +58,11 @@ import fit.iuh.dulichgiare.repository.TourDetailRepository;
 import fit.iuh.dulichgiare.repository.TourGuideRepository;
 import fit.iuh.dulichgiare.repository.TourGuideTourRepository;
 import fit.iuh.dulichgiare.repository.TourRepository;
+import fit.iuh.dulichgiare.service.MailService;
 import fit.iuh.dulichgiare.service.PolicyService;
 import fit.iuh.dulichgiare.service.TourGuideService;
 import fit.iuh.dulichgiare.service.TourService;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,6 +98,10 @@ public class TourServiceImpl implements TourService {
 	private BookingRepository bookingRepo;
 	@Autowired
 	private EmployeeRepository employeeRepo;
+	@Autowired
+	private MailService mailService;
+	@Autowired
+	private CustomerRepository customerRepo;
 
 	@Override
 	public List<TourDTOImages> getAllTours(Integer pageNo, Integer pageSize, String sortBy)
@@ -183,6 +192,71 @@ public class TourServiceImpl implements TourService {
 			}
 			itineraryDetailRepo.saveAll(itineraryDetails);
 			return 1;
+		}
+		return 2;
+	}
+
+	public int saveTourWhenUserRequestTour(TourDTOSave tourDTOSave, String userName)
+			throws InterruptedException, ExecutionException {
+		Employee employee = employeeRepo.findEmployeeByPhone(userName);
+
+		if (checkTourExisted(tourDTOSave.getName())) {
+			return 3;
+		}
+		if (tourDTOSave != null && !tourDTOSave.getPolicyName().isEmpty()) {
+			Policy policy = policyRepo.findPolicyByPolicyName(tourDTOSave.getPolicyName());
+			Promotion promotion = promotionRepo.findPromotionByName(tourDTOSave.getPromotionName());
+			final Tour tourSave;
+			if (promotion == null) {
+				Tour tour = new Tour(true, tourDTOSave.getName(), tourDTOSave.getImage(),
+						tourDTOSave.getDepartureTime(), tourDTOSave.getDeparture(), tourDTOSave.getDestination(),
+						tourDTOSave.getStartDay(), tourDTOSave.getEndDay(), tourDTOSave.getNumberOfDay(),
+						tourDTOSave.getNumberOfPeople(), 0, tourDTOSave.getType(), tourDTOSave.getPrice(),
+						LocalDateTime.now(), 0, employee.getName(), policy);
+				tourSave = tourRepo.save(tour);
+			} else {
+				Tour tour = new Tour(true, tourDTOSave.getName(), tourDTOSave.getImage(),
+						tourDTOSave.getDepartureTime(), tourDTOSave.getDeparture(), tourDTOSave.getDestination(),
+						tourDTOSave.getStartDay(), tourDTOSave.getEndDay(), tourDTOSave.getNumberOfDay(),
+						tourDTOSave.getNumberOfPeople(), 0, tourDTOSave.getType(), tourDTOSave.getPrice(),
+						LocalDateTime.now(), 0, employee.getName(), promotion, policy);
+				tourSave = tourRepo.save(tour);
+			}
+			if (tourSave.getId() > 0 && !(tourDTOSave.getTourGuideName().isEmpty())) {
+				for (String tourGuideName : tourDTOSave.getTourGuideName()) {
+					TourGuide tourGuide = tourGuideRepo.findTourGuideByName(tourGuideName);
+					TourGuideTour tourGuideTour = new TourGuideTour(tourSave, tourGuide);
+					tourGuideTourRepo.save(tourGuideTour);
+				}
+			}
+			if (tourSave != null) {
+				TourDetail tourDetail = new TourDetail(tourDTOSave.getTourDetail().getDescription(),
+						tourDTOSave.getTourDetail().getTransport(), tourDTOSave.getTourDetail().getStarHotel(),
+						tourSave);
+				tourDetailRepo.save(tourDetail);
+			}
+			Itinerary itinerary = new Itinerary(tourSave, tourDTOSave.getName());
+			itineraryRepo.save(itinerary);
+			List<ItineraryDetail> itineraryDetails = new ArrayList<>();
+			for (ItineraryDetailDTO iterableDTO : tourDTOSave.getItineraryDetail()) {
+				ItineraryDetail itineraryDetail = new ItineraryDetail();
+				itineraryDetail.setDescription(iterableDTO.getDescription());
+				itineraryDetail.setTitile(iterableDTO.getTitle());
+				itineraryDetail.setItinerary(itinerary);
+				itineraryDetails.add(itineraryDetail);
+			}
+			itineraryDetailRepo.saveAll(itineraryDetails);
+
+			CompletableFuture.runAsync(() -> {
+				Customer customer = customerRepo.findCustomerByName(tourDTOSave.getCustomerName());
+				try {
+					mailService.sendEmailRequestCreatedTourNotification(tourSave, customer);
+				} catch (MessagingException e) {
+					e.printStackTrace();
+				}
+			});
+			return 1;
+
 		}
 		return 2;
 	}

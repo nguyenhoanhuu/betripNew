@@ -1,8 +1,8 @@
 package fit.iuh.dulichgiare.service.impl;
 
+import java.text.DecimalFormat;
 import java.time.format.DateTimeFormatter;
 
-import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,6 +13,7 @@ import org.thymeleaf.context.Context;
 import fit.iuh.dulichgiare.constant.Constants;
 import fit.iuh.dulichgiare.entity.Booking;
 import fit.iuh.dulichgiare.entity.Customer;
+import fit.iuh.dulichgiare.entity.Tour;
 import fit.iuh.dulichgiare.service.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -35,8 +36,9 @@ public class MailServiceImpl implements MailService {
 		String timeTour = booking.getTour().getNumberofday() + "N" + (booking.getTour().getNumberofday() - 1) + "Đ";
 		double totalBill = booking.getTotal();
 		long billConvert = (long) totalBill;
+		DecimalFormat decimalFormat = new DecimalFormat("#,### VNĐ");
 		String body = getContextEmail(fullName, booking.getTour().getName(), departureTime, timeTour,
-				booking.getNumberofadbult() + booking.getNumberofchildren(), Long.toString(billConvert) + "VNĐ",
+				booking.getNumberofadbult() + booking.getNumberofchildren(), decimalFormat.format(billConvert),
 				linkOrderId, booking.getStatus(), null, templateMail, booking.getId());
 		message.setFrom(from);
 		message.setTo(to);
@@ -119,7 +121,43 @@ public class MailServiceImpl implements MailService {
 		ctx.setVariable("timeTour", timeTour);
 		ctx.setVariable("volumeCustomer", volumeCustomer);
 		ctx.setVariable("bookingId", bookingId);
-		
+
 		return templateEngine.process("reminder_one_day_before_template.html", ctx);
+	}
+
+	@Override
+	public String sendEmailRequestCreatedTourNotification(Tour tour, Customer customer) throws MessagingException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/YYYY");
+		MimeMessage mimeMessage = this.emailSender.createMimeMessage();
+		String body;
+		MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+		message.setFrom(Constants.MAIL_SENDER);
+		message.setTo(customer.getEmail());
+		message.setSubject("THÔNG BÁO: Yêu cầu tạo tour của bạn đã được tạo tour");
+		String departureTime = tour.getDepartureTime() + " " + formatter.format(tour.getStartday());
+		String timeTour = tour.getNumberofday() + "N" + (tour.getNumberofday() - 1) + "Đ";
+		DecimalFormat decimalFormat = new DecimalFormat("#,### VNĐ");
+
+		body = getContextForCreateTour(customer.getName(), tour.getId(), tour.getName(), departureTime, timeTour,
+				tour.getDeparture(), tour.getDestination(), tour.getNumberofpeople(),
+				decimalFormat.format(tour.getPrice()));
+		message.setText(body, true);
+		emailSender.send(mimeMessage);
+		return "oke";
+	}
+
+	private String getContextForCreateTour(String fullName, long tourId, String nameTour, String departureTime,
+			String timeTour, String departure, String destination, int volumeCustomer, String price) {
+		Context ctx = new Context();
+		ctx.setVariable("fullName", fullName);
+		ctx.setVariable("tourId", tourId);
+		ctx.setVariable("nameTour", nameTour);
+		ctx.setVariable("departureTime", departureTime);
+		ctx.setVariable("timeTour", timeTour);
+		ctx.setVariable("departure", departure);
+		ctx.setVariable("destination", destination);
+		ctx.setVariable("volumeCustomer", volumeCustomer);
+		ctx.setVariable("price", price);
+		return templateEngine.process("create_tour_template.html", ctx);
 	}
 }

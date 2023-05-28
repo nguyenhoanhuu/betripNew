@@ -65,6 +65,27 @@ public class TourController {
 		return null;
 	}
 
+	@PostMapping(value = { "/saveRequestTour" })
+	public ResponseEntity<MessageResponse> saveTourWhenRequestApproval(@RequestBody TourDTOSave tourDTOSave,
+			@AuthenticationPrincipal UserDetails user) throws InterruptedException, ExecutionException {
+		MessageResponse messageResponse = new MessageResponse();
+		int result = tourService.saveTourWhenUserRequestTour(tourDTOSave, user.getUsername());
+		if (result == 0) {
+			messageResponse.setStatus(false);
+			messageResponse.setMessage("Bạn không có quyền thực hiện!");
+			return new ResponseEntity<>(messageResponse, HttpStatus.FORBIDDEN);
+		} else if (result == 1) {
+			messageResponse.setStatus(true);
+			messageResponse.setMessage("Tạo tour và gửi email cho khách hàng thành công");
+			return new ResponseEntity<>(messageResponse, HttpStatus.OK);
+		} else if (result == 3) {
+			messageResponse.setStatus(true);
+			messageResponse.setMessage("Tour đã tồn tại ");
+			return new ResponseEntity<>(messageResponse, HttpStatus.BAD_REQUEST);
+		}
+		return null;
+	}
+
 	@PostMapping(value = { "", "/update" })
 	public ResponseEntity<MessageResponse> updateTour(@RequestBody TourDTOSave tourDTOSave,
 			@AuthenticationPrincipal UserDetails user) throws InterruptedException, ExecutionException {

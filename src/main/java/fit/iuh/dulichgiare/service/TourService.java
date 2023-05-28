@@ -22,6 +22,8 @@ public interface TourService {
 			throws InterruptedException, ExecutionException;
 
 	public int saveTour(TourDTOSave tourDTOSave, String userName) throws InterruptedException, ExecutionException;
+	
+	public int saveTourWhenUserRequestTour(TourDTOSave tourDTOSave, String userName) throws InterruptedException, ExecutionException;
 
 	public int updateTour(TourDTOSave tourDTOSave, String userName) throws InterruptedException, ExecutionException ;
 
