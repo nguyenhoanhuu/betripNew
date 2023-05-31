@@ -157,6 +157,8 @@ public class MailServiceImpl implements MailService {
 		ctx.setVariable("departure", departure);
 		ctx.setVariable("destination", destination);
 		ctx.setVariable("volumeCustomer", volumeCustomer);
+		String linkToTour = "https://triphappy.vercel.app/detail/"+ tourId;
+		ctx.setVariable("linkToTour", linkToTour);
 		ctx.setVariable("price", price);
 		return templateEngine.process("create_tour_template.html", ctx);
 	}
