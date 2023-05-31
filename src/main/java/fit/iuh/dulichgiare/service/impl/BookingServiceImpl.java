@@ -306,14 +306,13 @@ public class BookingServiceImpl implements BookingService {
 	@Override
 //	@Scheduled(cron = "0 0 1 * * ?") // Thực hiện vào lúc 1 giờ sáng mỗi ngày
 	@Scheduled(cron = "0 0 0 * * ?") // Thực hiện mỗi ngày lúc 0h00
+//	@Scheduled(cron = "0 */1 * ? * *")
 	public void deleteExpiredBookings() {
 		List<Booking> bookings = bookingRepo.findAll();
 		for (Booking booking : bookings) {
 			if (booking.getStatus().equals(Constants.STATUS_CHO_THANH_TOAN)
 					|| booking.getStatus().equals(Constants.STATUS_CHUA_CHON_HINH_THUC_THANH_TOAN)) {
-				LocalDate today = LocalDate.now();
-				long daysBetween = ChronoUnit.DAYS.between(booking.getCreateat(), today);
-				// tính số ngày đã trôi qua từ ngày tạo booking đến ngày hôm nay
+				long daysBetween = ChronoUnit.DAYS.between(booking.getCreateat(), LocalDateTime.now());
 				if (daysBetween >= 1) {
 					log.info("Proceed to delete the booking with id -" + booking.getId());
 					booking.setActive(false);
