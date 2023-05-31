@@ -398,28 +398,30 @@ public class BookingServiceImpl implements BookingService {
 			return bookingDTOs;
 		} else {
 			for (Booking booking : bookings) {
-				BookingDTO bookingDTONews = new BookingDTO();
-				bookingDTONews.setResult(1);
-				bookingDTONews.setActive(booking.isActive());
-				bookingDTONews.setId(booking.getId());
-				bookingDTONews.setDepartureTime(booking.getDepartureTime());
-				bookingDTONews.setStartDayTour(booking.getStartDayTour());
-				bookingDTONews.setEndDayTour(booking.getEndDayTour());
-				bookingDTONews.setNameCustomer(booking.getCustomer().getName());
-				bookingDTONews.setTourId(booking.getTour().getId());
-				bookingDTONews.setNameTour(booking.getTour().getName());
-				bookingDTONews.setVoucherCode(booking.getVoucher() != null ? booking.getVoucher().getCode() : "");
-				bookingDTONews.setNote(booking.getNote());
-				bookingDTONews.setPriceTour(booking.getPriceTour());
-				bookingDTONews.setPriceVoucher(booking.getPriceVoucher());
-				bookingDTONews.setNumberOfAdbult(booking.getNumberofadbult());
-				bookingDTONews.setNumberOfChildren(booking.getNumberofchildren());
-				bookingDTONews.setInfoOfAdbult(booking.getInfoofadbult());
-				bookingDTONews.setInfoOfChildren(booking.getInfoofchildren());
-				bookingDTONews.setCreateAt(booking.getCreateat());
-				bookingDTONews.setTotal(booking.getTotal());
-				bookingDTONews.setStatus(booking.getStatus());
-				bookingDTOs.add(bookingDTONews);
+				if (booking.isActive() == true) {
+					BookingDTO bookingDTONews = new BookingDTO();
+					bookingDTONews.setResult(1);
+					bookingDTONews.setActive(booking.isActive());
+					bookingDTONews.setId(booking.getId());
+					bookingDTONews.setDepartureTime(booking.getDepartureTime());
+					bookingDTONews.setStartDayTour(booking.getStartDayTour());
+					bookingDTONews.setEndDayTour(booking.getEndDayTour());
+					bookingDTONews.setNameCustomer(booking.getCustomer().getName());
+					bookingDTONews.setTourId(booking.getTour().getId());
+					bookingDTONews.setNameTour(booking.getTour().getName());
+					bookingDTONews.setVoucherCode(booking.getVoucher() != null ? booking.getVoucher().getCode() : "");
+					bookingDTONews.setNote(booking.getNote());
+					bookingDTONews.setPriceTour(booking.getPriceTour());
+					bookingDTONews.setPriceVoucher(booking.getPriceVoucher());
+					bookingDTONews.setNumberOfAdbult(booking.getNumberofadbult());
+					bookingDTONews.setNumberOfChildren(booking.getNumberofchildren());
+					bookingDTONews.setInfoOfAdbult(booking.getInfoofadbult());
+					bookingDTONews.setInfoOfChildren(booking.getInfoofchildren());
+					bookingDTONews.setCreateAt(booking.getCreateat());
+					bookingDTONews.setTotal(booking.getTotal());
+					bookingDTONews.setStatus(booking.getStatus());
+					bookingDTOs.add(bookingDTONews);
+				}
 			}
 			return bookingDTOs;
 		}
